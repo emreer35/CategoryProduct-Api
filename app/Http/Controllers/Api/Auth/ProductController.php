@@ -10,9 +10,27 @@ use Illuminate\Http\Request;
 class ProductController extends Controller
 {
     
-    public function index()
+    public function index(Request $request)
     {
-        return response()->json(Product::with('category')->get());
+
+        $product = Product::with('category')
+        ->when($request->search, function ($query) use ($request) { 
+            $query->where('name','like', '%'. $request->search . '%')
+            ->orWhereHas('category', function($query) use ($request) {
+                $query->where('name', 'like', '%' . $request->search . '%');
+            });
+        })
+        ->when($request->min_price, function($query) use ($request){
+            $query->where('price','>=',$request->min_price);
+        })
+        ->when($request->max_price, function($query) use ($request) {
+            $query->where('price', '<=', $request->max_price);
+        })
+        ->when($request->count, function ($query) use ($request) {
+            $query->where('count','=',$request->count);
+        })
+        ->get();
+        return response()->json($product);
     }
 
     
