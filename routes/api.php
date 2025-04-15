@@ -6,6 +6,8 @@ use App\Http\Controllers\Api\Admin\CategoryController as AdminCategoryController
 use App\Http\Controllers\Api\Admin\ProductController as AdminProductController;
 use App\Http\Controllers\Api\Auth\CategoryController;
 use App\Http\Controllers\Api\Auth\ProductController;
+use App\Http\Controllers\Api\Auth\ReviewController;
+use App\Models\Review;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -63,7 +65,13 @@ Route::middleware('auth:api')->group(function(){
     Route::get('/products/{product}',[ProductController::class,'show']);
     Route::get('/categories/{category}/products',[ProductController::class, 'getByCategory']);
 
-
+    // Review 
+    Route::get('/reviews',[ReviewController::class, 'index']);
+    Route::post('/products/{product}/review/create',[ReviewController::class,'store']);
+    Route::get('/user/reviews', [ReviewController::class, 'getUserReviews']);
+    Route::get('/reviews/{review}', [ReviewController::class,'show']);
+    Route::put('/products/{product}/reviews/{review}/update',[ReviewController::class,'update']);
+    Route::delete('/reviews/{review}/delete',[ReviewController::class,'destroy']);
     
 
 });

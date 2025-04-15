@@ -7,11 +7,12 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Review extends Model
 {
-    protected $table = 'rewiewvs';
+    protected $table = 'reviews';
     protected $fillable = [
         'user_id',
         'product_id',
-        'review'
+        'review',
+        'rating'
     ];
 
     public function product():BelongsTo {
